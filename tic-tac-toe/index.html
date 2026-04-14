@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Крестики-нолики</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <main class="app">
+      <header class="header">
+        <h1 class="title">Крестики-нолики</h1>
+        <p class="status" id="status" role="status" aria-live="polite">Ход: <span id="current">X</span></p>
+      </header>
+
+      <div class="board-wrap">
+        <div class="board" id="board" role="grid" aria-label="Игровое поле 3 на 3">
+          <button type="button" class="cell" data-index="0" aria-label="Ячейка 1"></button>
+          <button type="button" class="cell" data-index="1" aria-label="Ячейка 2"></button>
+          <button type="button" class="cell" data-index="2" aria-label="Ячейка 3"></button>
+          <button type="button" class="cell" data-index="3" aria-label="Ячейка 4"></button>
+          <button type="button" class="cell" data-index="4" aria-label="Ячейка 5"></button>
+          <button type="button" class="cell" data-index="5" aria-label="Ячейка 6"></button>
+          <button type="button" class="cell" data-index="6" aria-label="Ячейка 7"></button>
+          <button type="button" class="cell" data-index="7" aria-label="Ячейка 8"></button>
+          <button type="button" class="cell" data-index="8" aria-label="Ячейка 9"></button>
+        </div>
+      </div>
+
+      <footer class="footer">
+        <button type="button" class="btn" id="reset">Новая игра</button>
+      </footer>
+    </main>
+    <script src="app.js"></script>
+  </body>
+</html>
