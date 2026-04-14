@@ -7,37 +7,109 @@
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
-    <main class="app">
-      <header class="header">
-        <h1 class="title">Крестики-нолики</h1>
-        <p class="repo-link">
-          <a
-            href="https://github.com/SGI12/mentorship/tree/main/tic-tac-toe"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Исходники на GitHub</a>
-        </p>
-        <p class="status" id="status" role="status" aria-live="polite">Ход: <span id="current">X</span></p>
-      </header>
+    <div class="layout">
+      <main class="app game-panel">
+        <header class="header">
+          <h1 class="title">Крестики-нолики</h1>
+          <p class="repo-link">
+            <a
+              href="https://github.com/SGI12/mentorship/tree/main/tic-tac-toe"
+              target="_blank"
+              rel="noopener noreferrer"
+              >Исходники на GitHub</a>
+          </p>
+          <p class="status" id="status" role="status" aria-live="polite">Ход: <span id="current">X</span></p>
+        </header>
 
-      <div class="board-wrap">
-        <div class="board" id="board" role="grid" aria-label="Игровое поле 3 на 3">
-          <button type="button" class="cell" data-index="0" aria-label="Ячейка 1"></button>
-          <button type="button" class="cell" data-index="1" aria-label="Ячейка 2"></button>
-          <button type="button" class="cell" data-index="2" aria-label="Ячейка 3"></button>
-          <button type="button" class="cell" data-index="3" aria-label="Ячейка 4"></button>
-          <button type="button" class="cell" data-index="4" aria-label="Ячейка 5"></button>
-          <button type="button" class="cell" data-index="5" aria-label="Ячейка 6"></button>
-          <button type="button" class="cell" data-index="6" aria-label="Ячейка 7"></button>
-          <button type="button" class="cell" data-index="7" aria-label="Ячейка 8"></button>
-          <button type="button" class="cell" data-index="8" aria-label="Ячейка 9"></button>
+        <div class="board-wrap">
+          <div class="board" id="board" role="grid" aria-label="Игровое поле 3 на 3">
+            <button type="button" class="cell" data-index="0" aria-label="Ячейка 1"></button>
+            <button type="button" class="cell" data-index="1" aria-label="Ячейка 2"></button>
+            <button type="button" class="cell" data-index="2" aria-label="Ячейка 3"></button>
+            <button type="button" class="cell" data-index="3" aria-label="Ячейка 4"></button>
+            <button type="button" class="cell" data-index="4" aria-label="Ячейка 5"></button>
+            <button type="button" class="cell" data-index="5" aria-label="Ячейка 6"></button>
+            <button type="button" class="cell" data-index="6" aria-label="Ячейка 7"></button>
+            <button type="button" class="cell" data-index="7" aria-label="Ячейка 8"></button>
+            <button type="button" class="cell" data-index="8" aria-label="Ячейка 9"></button>
+          </div>
+        </div>
+
+        <footer class="footer">
+          <div class="footer-actions">
+            <button type="button" class="btn" id="reset">Новая игра</button>
+            <button type="button" class="btn btn-secondary" id="saveResult" hidden>Сохранить в историю</button>
+          </div>
+        </footer>
+      </main>
+
+      <section class="history-panel" aria-labelledby="history-heading">
+        <div class="history-panel-inner">
+          <h2 class="history-title" id="history-heading">История партий</h2>
+          <p class="history-hint">Данные в памяти и в <code>localStorage</code> — источник истины для списка ниже.</p>
+
+          <div class="history-toolbar">
+            <button type="button" class="btn btn-small" id="btnAddRecord">Добавить запись</button>
+            <button type="button" class="btn btn-small btn-ghost" id="btnSearchRecords">Поиск</button>
+            <button type="button" class="btn btn-small btn-danger" id="btnClearAllRecords">Удалить все</button>
+          </div>
+
+          <div class="alphabet" id="alphabet" aria-label="Фильтр по первой букве названия"></div>
+
+          <ul class="history-list" id="historyList"></ul>
+          <p class="history-empty" id="historyEmpty" hidden>Список пуст. Добавь запись или сохрани партию.</p>
+        </div>
+      </section>
+    </div>
+
+    <!-- Модалка: добавление / редактирование записи -->
+    <div class="modal-overlay" id="formModal" hidden>
+      <div class="modal-dialog" role="dialog" aria-modal="true" aria-labelledby="formModalTitle">
+        <h3 class="modal-title" id="formModalTitle">Новая запись</h3>
+        <form id="recordForm" novalidate>
+          <div class="field">
+            <label for="fieldTitle">Название записи</label>
+            <input type="text" id="fieldTitle" name="title" maxlength="80" autocomplete="off" />
+            <p class="field-error" id="errTitle" hidden></p>
+          </div>
+          <div class="field">
+            <label for="fieldOutcome">Итог партии</label>
+            <select id="fieldOutcome" name="outcome">
+              <option value="X">Победил X</option>
+              <option value="O">Победил O</option>
+              <option value="draw">Ничья</option>
+            </select>
+            <p class="field-error" id="errOutcome" hidden></p>
+          </div>
+          <div class="field">
+            <label for="fieldMoves">Число ходов (1–9, только цифры)</label>
+            <input type="text" id="fieldMoves" name="moves" inputmode="numeric" maxlength="1" autocomplete="off" />
+            <p class="field-error" id="errMoves" hidden></p>
+          </div>
+          <div class="modal-actions">
+            <button type="button" class="btn btn-ghost" id="formModalCancel">Отмена</button>
+            <button type="submit" class="btn" id="formModalSubmit">Сохранить</button>
+          </div>
+        </form>
+      </div>
+    </div>
+
+    <!-- Модалка: поиск -->
+    <div class="modal-overlay" id="searchModal" hidden>
+      <div class="modal-dialog modal-dialog-wide" role="dialog" aria-modal="true" aria-labelledby="searchModalTitle">
+        <h3 class="modal-title" id="searchModalTitle">Поиск по названию</h3>
+        <div class="field">
+          <label for="searchInput">Запрос</label>
+          <input type="search" id="searchInput" autocomplete="off" placeholder="Часть названия записи" />
+        </div>
+        <ul class="history-list search-results" id="searchResults"></ul>
+        <p class="search-empty" id="searchEmpty" hidden>Ничего не найдено.</p>
+        <div class="modal-actions">
+          <button type="button" class="btn btn-ghost" id="searchModalClose">Закрыть</button>
         </div>
       </div>
+    </div>
 
-      <footer class="footer">
-        <button type="button" class="btn" id="reset">Новая игра</button>
-      </footer>
-    </main>
     <script src="app.js"></script>
   </body>
 </html>
